@@ -1,6 +1,6 @@
 # Architect Agent Project
 
-This project contains a system for collaborating with an AI assistant to act as a **System Architect**. Its purpose is to help you transform a high-level project idea into a concrete, actionable set of `INITIAL.md` files that are ready for implementation.
+This project contains a system for collaborating with an AI assistant to act as a **System Architect**. Its purpose is to help you transform a high-level project idea into a concrete, actionable set of `INITIAL.md` files that are ready for implementation with this workflow: https://github.com/coleam00/context-engineering-intro
 
 ## 🚀 Workflow
 
