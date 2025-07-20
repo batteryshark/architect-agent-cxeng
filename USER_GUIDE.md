@@ -25,13 +25,32 @@ This table lists all the commands available in the workflow.
 | `brainstorm-vision` | An interactive session to transform a raw idea into a structured project vision (`vision.md`). Use this at the very beginning of a project when you only have a high-level concept. |
 | `refine-architecture` | An interactive review of the `vision.md` file to stress-test the concept, identify risks, and challenge assumptions before planning begins. Use this immediately after creating the vision. |
 | `init-project` | Automatically populates the `PROJECT.md` roadmap and creates stub PRP files for every feature defined in the `vision.md`. Use this once the vision and architecture are stable. |
-| `generate-prp` | An interactive session to flesh out a stub PRP with detailed research, code examples, a technical plan, and validation steps. Use this for each feature before development starts. |
-| `execute-prp` | The primary coding runtime - implement your PRP to specification. |
+| `generate-prp` | Prompts to create an "Epic PRP" for a large feature or a "Sub-PRP" for an existing Epic. Use this to break down large tasks or plan detailed implementation steps. |
+| `execute-prp` | Implements a `Sub-PRP`. If run on an `Epic PRP`, it guides the user to select a specific `Sub-PRP` to execute. This is the primary coding runtime for feature development. |
 | `audit-codebase` | Scans the codebase for dead code, stale dependencies, and complexity hotspots, generating a timestamped report. Use this periodically to maintain code health. |
 | `deprecate-feature` | A guided process to safely remove a feature and its dependencies from the codebase. Use this when a feature is no longer needed or is being replaced. |
 | `re-architect` | Compares the original vision to the current state of the code, identifies architectural drift, and helps you create a plan to either realign the code or update the vision. Use this when the project feels like it's deviating from its intended path. |
 
-## 3. Core Workflow & Scenarios
+## 3. Managing Large Features with Epics
+
+For large, complex features that cannot be described or implemented in a single pass, the system uses an Epic/Sub-PRP structure. This approach helps manage complexity and avoids context window limitations of the LLM.
+
+*   **Epic PRP:** A high-level planning document. It defines the overall goal of the feature and breaks it down into a sequence of smaller, concrete implementation tasks. It does **not** contain code.
+*   **Sub-PRP:** A detailed, executable task that corresponds to one step in the Epic's plan. It contains the specific technical details, code examples, and implementation steps required to build a piece of the larger feature.
+
+This structure is represented in the file system as follows:
+
+```
+docs/prps/
+└── new-feature-epic/
+    ├── epic.md
+    └── sub-prps/
+        ├── 01-data-model-and-storage.md
+        ├── 02-api-endpoints.md
+        └── 03-frontend-integration.md
+```
+
+## 4. Core Workflow & Scenarios
 
 This workflow is designed to be flexible. Here’s how to adapt it to different starting points.
 
@@ -40,9 +59,12 @@ This workflow is designed to be flexible. Here’s how to adapt it to different 
 1.  **Vision:** Start with `brainstorm-vision` to create `docs/vision/vision.md`.
 2.  **Architecture:** Immediately follow up with `refine-architecture` to harden the vision.
 3.  **Initialization:** Run `init-project` to create the project structure.
-4.  **Planning:** For each feature in your `PROJECT.md` roadmap, run `generate-prp` to create a detailed plan.
-5.  **Implementation:** Write the code with `execute-prp` to implement the feature as described in the PRP.
-6.  **Repeat:** Continue generating PRPs and implementing features until the project is complete.
+4.  **Planning:**
+    *   For **large features**, run `generate-prp` and select "Epic PRP". This will create a high-level plan and a directory for `Sub-PRPs`.
+    *   For each task in the Epic, run `generate-prp` again to create a `Sub-PRP` with a detailed implementation plan.
+    *   For **smaller features**, you can create a single, detailed PRP directly.
+5.  **Implementation:** Use `execute-prp` on a `Sub-PRP` or a standalone PRP to write the code.
+6.  **Repeat:** Continue this cycle of planning and implementation until the project is complete.
 
 ### Scenario A: The Blank Slate
 
@@ -66,7 +88,7 @@ You are returning to a project after a long break and need to get re-oriented.
 2.  **Review Architecture:** Run `re-architect`. This is the most critical step. It will show you exactly how the code's current state differs from the original plan, allowing you to understand what has changed and why.
 3.  **Formulate a Plan:** Based on the output of `re-architect`, decide whether to update the vision or refactor the code. The command will help you create the necessary PRPs to get back on track safely.
 
-## 4. The Rhythm of Development
+## 5. The Rhythm of Development
 
 Knowing *when* to use each command is key to leveraging this workflow effectively.
 
