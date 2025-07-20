@@ -40,7 +40,20 @@ class NewService:
 
 ---
 
-## 3. All Needed Context
+## 3. Task Checklist
+*This checklist will be populated during the planning phase and updated during execution.*
+- [ ] Task 1: Description of the first step.
+- [ ] Task 2: Description of the second step.
+
+---
+
+## 4. Developer Notes
+*A space for notes, observations, or issues discovered during implementation.*
+- (timestamp) Note: ...
+
+---
+
+## 5. All Needed Context
 
 This section is critical for the AI. Provide only the context **absolutely necessary** for this specific task.
 
@@ -53,7 +66,7 @@ This section is critical for the AI. Provide only the context **absolutely neces
 
 ---
 
-## 4. Validation Loop
+## 6. Validation Loop
 
 Provide the exact commands to run to validate the implementation of **this Sub-PRP only**.
 

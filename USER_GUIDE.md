@@ -26,7 +26,7 @@ This table lists all the commands available in the workflow.
 | `refine-architecture` | An interactive review of the `vision.md` file to stress-test the concept, identify risks, and challenge assumptions before planning begins. Use this immediately after creating the vision. |
 | `init-project` | Automatically populates the `PROJECT.md` roadmap and creates stub PRP files for every feature defined in the `vision.md`. Use this once the vision and architecture are stable. |
 | `generate-prp` | Prompts to create an "Epic PRP" for a large feature or a "Sub-PRP" for an existing Epic. Use this to break down large tasks or plan detailed implementation steps. |
-| `execute-prp` | Implements a `Sub-PRP`. If run on an `Epic PRP`, it guides the user to select a specific `Sub-PRP` to execute. This is the primary coding runtime for feature development. |
+| `execute-prp` | Implements a `Sub-PRP`. It dynamically updates a checklist and logs notes within the Sub-PRP, turning it into a "living document." If run on an `Epic PRP`, it guides the user to select a specific `Sub-PRP` to execute. This is the primary coding runtime for feature development. |
 | `audit-codebase` | Scans the codebase for dead code, stale dependencies, and complexity hotspots, generating a timestamped report. Use this periodically to maintain code health. |
 | `deprecate-feature` | A guided process to safely remove a feature and its dependencies from the codebase. Use this when a feature is no longer needed or is being replaced. |
 | `re-architect` | Compares the original vision to the current state of the code, identifies architectural drift, and helps you create a plan to either realign the code or update the vision. Use this when the project feels like it's deviating from its intended path. |
@@ -49,6 +49,20 @@ docs/prps/
         ├── 02-api-endpoints.md
         └── 03-frontend-integration.md
 ```
+
+### The Sub-PRP as a Living Document
+
+The `generate-prp` and `execute-prp` commands work together to turn a Sub-PRP into a dynamic, stateful task manager.
+
+*   **Task Checklist:** When `generate-prp` creates a Sub-PRP, it includes a markdown checklist of the high-level tasks required for implementation.
+*   **Developer Notes:** The Sub-PRP also contains a section for timestamped developer notes.
+
+When you run `execute-prp`, the system interacts with these sections directly:
+1.  It reads the checklist to find the first unfinished task.
+2.  As it completes each task, it marks the corresponding checklist item as done (`[x]`).
+3.  It appends detailed, timestamped notes of its actions to the "Developer Notes" section.
+
+This allows for long-running, complex tasks to be suspended and resumed seamlessly. If the command is stopped, the next time it is run on the same Sub-PRP, it will pick up exactly where it left off, using the checklist to determine the next step.
 
 ## 4. Core Workflow & Scenarios
 
